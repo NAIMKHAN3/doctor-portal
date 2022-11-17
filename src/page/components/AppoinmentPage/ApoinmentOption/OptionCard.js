@@ -2,7 +2,6 @@ import React from 'react';
 
 const OptionCard = ({ option, setInputModal }) => {
     const { name, slots } = option;
-    console.log(option)
     return (
         <div>
             <div className="card bg-base-100 shadow-xl text-center">

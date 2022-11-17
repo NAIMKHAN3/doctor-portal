@@ -1,25 +1,48 @@
 import { format } from 'date-fns';
-import React from 'react';
+import React, { useContext } from 'react';
+import toast from 'react-hot-toast';
+import { AuthContex } from '../../../../UserContext/UserContext';
 
-const OptionModal = ({ inputModal, selected, setInputModal }) => {
+const OptionModal = ({ inputModal, selected, setInputModal, refetch }) => {
+    const { user } = useContext(AuthContex)
     const { name, slots } = inputModal;
     const date = format(selected, 'PP')
     const handleModal = e => {
         e.preventDefault()
         const form = e.target;
         const time = form.time.value;
-        const name = form.name.value;
+        const username = form.name.value;
         const phone = form.phone.value;
         const email = form.email.value;
         const modalInformation = {
-            date,
+            treetmentname: name,
             time,
-            name,
-            phone,
+            date,
+            username,
             email,
+            phone,
         }
-        console.log(modalInformation)
-        setInputModal(null)
+        fetch('http://localhost:5000/booking', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(modalInformation)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.acknowledged) {
+                    setInputModal(null)
+                    toast.success('appoinment success')
+                    refetch();
+                }
+                else {
+                    toast.error(data.message)
+                    setInputModal(null)
+                }
+            })
+            .catch(e => console.log(e))
+
 
 
     }
@@ -38,9 +61,9 @@ const OptionModal = ({ inputModal, selected, setInputModal }) => {
                                 slots.map((slot, i) => <option key={i} >{slot}</option>)
                             }
                         </select>
-                        <input name='name' type="text" placeholder="Full Name" className="input input-bordered w-full mb-6" required />
+                        <input name='username' type="text" placeholder="Full Name" defaultValue={user?.displayName} disabled className="input input-bordered w-full mb-6" required />
+                        <input name='email' type="text" placeholder="Email" defaultValue={user?.email} disabled className="input input-bordered w-full mb-6" required />
                         <input name='phone' type="text" placeholder="Phone Number" className="input input-bordered w-full mb-6" required />
-                        <input name='email' type="text" placeholder="Email" className="input input-bordered w-full mb-6" required />
                         <button type='submit' className="btn btn-accent w-full mb-6">Submit</button>
                     </form>
                 </div>

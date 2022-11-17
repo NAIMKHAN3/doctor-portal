@@ -1,17 +1,20 @@
+import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import OptionCard from './OptionCard';
 import OptionModal from './OptionModal';
 
 const ApoinmentOption = ({ selected }) => {
-    const [options, setOptions] = useState([]);
     const [inputModal, setInputModal] = useState();
+    const date = format(selected, 'PP')
+    console.log(date)
 
-    useEffect(() => {
-        fetch('apoinmentoption.json')
-            .then(res => res.json())
-            .then(data => setOptions(data))
-    }, [])
+    const { data: options = [], refetch } = useQuery({
+        queryKey: ['appoinmentoption', date],
+        queryFn: () => fetch(`http://localhost:5000/appoinmentoption?date=${date}`).then(res => res.json())
+    })
+
+
 
     return (
         <div className='my-20'>
@@ -24,6 +27,7 @@ const ApoinmentOption = ({ selected }) => {
             {
                 inputModal &&
                 <OptionModal
+                    refetch={refetch}
                     inputModal={inputModal}
                     selected={selected}
                     setInputModal={setInputModal}

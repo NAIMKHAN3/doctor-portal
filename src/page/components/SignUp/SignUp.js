@@ -5,12 +5,17 @@ import { AuthContex } from '../../../UserContext/UserContext';
 
 
 const SignUp = () => {
-    const { createUser, signInGoogle } = useContext(AuthContex)
+    const { createUser, signInGoogle, updateUserName } = useContext(AuthContex)
     const { register, handleSubmit, formState: { errors } } = useForm();
     const handleSignUp = data => {
-        const { email, password } = data;
+        const { email, password, name } = data;
+        console.log(data, name)
         createUser(email, password)
-            .then(result => console.log(result.user))
+            .then(result => {
+                updateUserName(name)
+                    .then(result => { })
+                    .catch(e => console.log(e))
+            })
             .catch(e => console.log(e.message))
     }
     const handleGoogle = () => {
