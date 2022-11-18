@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContex } from '../../../UserContext/UserContext';
 
 
 const SignUp = () => {
-    const { createUser, signInGoogle, updateUserName } = useContext(AuthContex)
+    const { createUser, signInGoogle, updateUserName } = useContext(AuthContex);
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
     const handleSignUp = data => {
         const { email, password, name } = data;
@@ -13,14 +14,34 @@ const SignUp = () => {
         createUser(email, password)
             .then(result => {
                 updateUserName(name)
-                    .then(result => { })
+                    .then(result => {
+                        userAddMongodb(name, email)
+                        navigate('/')
+                    })
                     .catch(e => console.log(e))
             })
             .catch(e => console.log(e.message))
     }
     const handleGoogle = () => {
         signInGoogle()
-            .then(result => console.log(result.user))
+            .then(result => {
+                navigate('/')
+                console.log(result.user)
+            })
+            .catch(e => console.log(e))
+    }
+
+    const userAddMongodb = (name, email) => {
+        const user = { name, email }
+        fetch('http://localhost:5000/users', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then(res => res.json())
+            .then(data => console.log(data))
             .catch(e => console.log(e))
     }
     return (

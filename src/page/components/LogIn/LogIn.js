@@ -1,21 +1,28 @@
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContex } from '../../../UserContext/UserContext';
 
 const LogIn = () => {
     const { signIn, signInGoogle } = useContext(AuthContex)
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const navigate = useNavigate();
     const handleLogin = data => {
         const { email, password } = data;
         signIn(email, password)
-            .then(result => console.log(result.user))
+            .then(result => {
+                navigate('/')
+                console.log(result.user)
+            })
             .catch(e => console.log(e))
     }
 
     const handleGoogle = () => {
         signInGoogle()
-            .then(result => console.log(result.user))
+            .then(result => {
+                navigate('/')
+                console.log(result.user)
+            })
             .catch(e => console.log(e))
     }
 

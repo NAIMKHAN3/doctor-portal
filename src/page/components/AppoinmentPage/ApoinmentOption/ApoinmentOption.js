@@ -7,8 +7,6 @@ import OptionModal from './OptionModal';
 const ApoinmentOption = ({ selected }) => {
     const [inputModal, setInputModal] = useState();
     const date = format(selected, 'PP')
-    console.log(date)
-
     const { data: options = [], refetch } = useQuery({
         queryKey: ['appoinmentoption', date],
         queryFn: () => fetch(`http://localhost:5000/appoinmentoption?date=${date}`).then(res => res.json())
