@@ -1,18 +1,28 @@
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContex } from '../../../UserContext/UserContext';
 
 const LogIn = () => {
     const { signIn, signInGoogle } = useContext(AuthContex)
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const navigate = useNavigate();
+    const Navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
     const handleLogin = data => {
         const { email, password } = data;
         signIn(email, password)
             .then(result => {
-                navigate('/')
-                console.log(result.user)
+                fetch(`http://localhost:5000/jwt/?email=${email}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const token = data.token;
+                        localStorage.setItem('token', token)
+                        toast.success('login success')
+                        Navigate(from, { replace: true })
+                    })
+                    .catch(e => console.log(e))
             })
             .catch(e => console.log(e))
     }
@@ -20,9 +30,35 @@ const LogIn = () => {
     const handleGoogle = () => {
         signInGoogle()
             .then(result => {
-                navigate('/')
-                console.log(result.user)
+                const user = result?.user;
+                const email = user?.email;
+                userAddMongodb(user?.displayName, email)
+
+                fetch(`http://localhost:5000/jwt/?email=${email}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const token = data.token;
+                        localStorage.setItem('token', token)
+                    })
+                    .catch(e => console.log(e))
+                toast.success('login success')
+                Navigate(from, { replace: true })
             })
+            .catch(e => console.log(e))
+
+    }
+
+    const userAddMongodb = (name, email) => {
+        const user = { name, email }
+        fetch('http://localhost:5000/users', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then(res => res.json())
+            .then(data => { })
             .catch(e => console.log(e))
     }
 

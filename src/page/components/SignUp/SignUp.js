@@ -1,12 +1,17 @@
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContex } from '../../../UserContext/UserContext';
 
 
 const SignUp = () => {
     const { createUser, signInGoogle, updateUserName } = useContext(AuthContex);
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
+    console.log(from)
+    console.log('signup', location)
     const { register, handleSubmit, formState: { errors } } = useForm();
     const handleSignUp = data => {
         const { email, password, name } = data;
@@ -16,7 +21,14 @@ const SignUp = () => {
                 updateUserName(name)
                     .then(result => {
                         userAddMongodb(name, email)
-                        navigate('/')
+                        fetch(`http://localhost:5000/jwt?email=${email}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                const token = data.token;
+                                localStorage.setItem('token', token)
+                            })
+                            .catch(e => console.log(e))
+                        navigate(from, { replace: true })
                     })
                     .catch(e => console.log(e))
             })
@@ -25,7 +37,16 @@ const SignUp = () => {
     const handleGoogle = () => {
         signInGoogle()
             .then(result => {
-                navigate('/')
+                const user = result?.user;
+                userAddMongodb(user?.displayName, user?.email)
+                fetch(`http://localhost:5000/jwt?email=${user?.email}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const token = data.token;
+                        localStorage.setItem('token', token)
+                    })
+                toast.success('signup success')
+                navigate(from, { replace: true })
                 console.log(result.user)
             })
             .catch(e => console.log(e))

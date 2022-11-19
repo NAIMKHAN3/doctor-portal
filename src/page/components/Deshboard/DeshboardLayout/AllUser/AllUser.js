@@ -1,13 +1,43 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import toast from 'react-hot-toast';
 
 const AllUser = () => {
 
-    const { data: users = [] } = useQuery({
+
+    const { data: users = [], refetch } = useQuery({
         queryKey: ['allusers'],
         queryFn: () => fetch('http://localhost:5000/allusers')
             .then(res => res.json())
     })
+    const handleUpdate = id => {
+        fetch(`http://localhost:5000/user/admin/${id}`, {
+            method: 'PUT',
+            headers: {
+                authorization: `bearer ${localStorage.getItem('token')}`
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                toast.success('Make a Admin success')
+                refetch()
+            })
+            .catch(e => console.log(e))
+    }
+    const handleDelete = email => {
+        const proceed = window.confirm(`Are you sure, you want to delete ${email}`);
+        if (proceed) {
+            fetch(`http://localhost:5000/user/${email}`, {
+                method: 'DELETE',
+            })
+                .then(res => res.json())
+                .then(data => {
+                    toast.success('User Delete successfull')
+                    refetch()
+                })
+                .catch(e => console.log(e))
+        }
+
+    }
     return (
         <div>
             <h1 className='text-3xl font-bold'>All Users</h1>
@@ -30,8 +60,8 @@ const AllUser = () => {
                                     <th>{i + 1}</th>
                                     <td>{user?.name}</td>
                                     <td>{user?.email}</td>
-                                    <td><button className='btn btn-outline'>Admin</button></td>
-                                    <td><button className='btn btn-outline'>Delete</button></td>
+                                    <td>{user?.role !== 'admin' && <button onClick={() => handleUpdate(user?._id)} className='btn btn-primary'>Admin</button>}</td>
+                                    <td>{user?.role !== 'admin' && <button onClick={() => handleDelete(user?.email)} className='btn btn-error'>Delete</button>}</td>
                                 </tr>)
                             }
 
