@@ -21,7 +21,12 @@ const DeshboardLayout = () => {
 
                         <li><Link to='/deshboard'>My Appoinment</Link></li>
                         {
-                            isAdmin && <li><Link to='/deshboard/alluser'>All User</Link></li>
+                            isAdmin && <>
+                                <li><Link to='/deshboard/alluser'>All User</Link></li>
+                                <li><Link to='/deshboard/doctors'>Manage Doctor</Link></li>
+                                <li><Link to='/deshboard/adddoctor'>Add Doctor</Link></li>
+
+                            </>
                         }
 
                     </ul>

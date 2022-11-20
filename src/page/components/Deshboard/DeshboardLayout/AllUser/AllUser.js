@@ -40,11 +40,10 @@ const AllUser = () => {
     }
     return (
         <div>
-            <h1 className='text-3xl font-bold'>All Users</h1>
+            <h1 className='text-3xl font-bold'>All Users{users.length}</h1>
             <div className='mt-5'>
                 <div className="overflow-x-auto">
                     <table className="table w-full">
-
                         <thead>
                             <tr>
                                 <th></th>
