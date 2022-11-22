@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { data } from 'autoprefixer';
 import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { AuthContex } from '../../../../UserContext/UserContext';
 
 const MyAppoinment = () => {
@@ -14,7 +15,7 @@ const MyAppoinment = () => {
                     authorization: `bearer ${localStorage.getItem('token')}`
                 }
             }).then(res => {
-                setIsLoading(!isLoading)
+                setIsLoading(false)
                 return res.json()
             }
             )
@@ -22,7 +23,7 @@ const MyAppoinment = () => {
     return (
         <div className='p-10'>
             {
-                isLoading && <p className='text-center'>Loading....</p>
+                isLoading && <p className='text-center font-bold text-3xl'>Loading....</p>
             },
             <h1 className='text-3xl font-bold'>My Appoinment</h1>
             <div className='mt-5'>
@@ -35,6 +36,8 @@ const MyAppoinment = () => {
                                 <th>Treetment</th>
                                 <th>Date</th>
                                 <th>Time</th>
+                                <th>Price</th>
+                                <th>Payment</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,6 +47,15 @@ const MyAppoinment = () => {
                                     <td>{booking?.treetmentname}</td>
                                     <td>{booking?.date}</td>
                                     <td>{booking?.time}</td>
+                                    <td>{booking?.price}</td>
+                                    <td>
+                                        {
+                                            booking.price && !booking.paid && <Link to={`/deshboard/paid/${booking._id}`}><button className='btn btn-primary btn-sm'>Pay</button></Link>
+                                        }
+                                        {
+                                            booking.price && booking.paid && <span className='text-green-700'>Paid</span>
+                                        }
+                                    </td>
                                 </tr>)
                             }
 

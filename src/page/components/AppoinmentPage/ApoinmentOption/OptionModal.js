@@ -5,19 +5,20 @@ import { AuthContex } from '../../../../UserContext/UserContext';
 
 const OptionModal = ({ inputModal, selected, setInputModal, refetch }) => {
     const { user } = useContext(AuthContex)
-    const { name, slots } = inputModal;
+    const { name, slots, price } = inputModal;
     const date = format(selected, 'PP')
     const handleModal = e => {
         e.preventDefault()
         const form = e.target;
         const time = form.time.value;
-        const username = form.name.value;
+        const username = form.username.value;
         const phone = form.phone.value;
         const email = form.email.value;
         const modalInformation = {
             treetmentname: name,
             time,
             date,
+            price,
             username,
             email,
             phone,
@@ -52,7 +53,7 @@ const OptionModal = ({ inputModal, selected, setInputModal, refetch }) => {
             <div className="modal">
                 <div className="modal-box relative">
                     <label htmlFor="doctor-modal" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-                    <h3 className="text-lg tex font-bold mb-6">{name}</h3>
+                    <h3 className="text-lg tex font-bold mb-6">{name} Price: ${price}</h3>
                     <form onSubmit={handleModal}>
                         <input name='date' type="text" value={date} disabled placeholder="Type here" className="mb-6 input input-bordered w-full" />
                         <select name='time' className="select select-bordered w-full mb-6">

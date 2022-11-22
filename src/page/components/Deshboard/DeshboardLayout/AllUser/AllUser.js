@@ -59,8 +59,8 @@ const AllUser = () => {
                                     <th>{i + 1}</th>
                                     <td>{user?.name}</td>
                                     <td>{user?.email}</td>
-                                    <td>{user?.role !== 'admin' && <button onClick={() => handleUpdate(user?._id)} className='btn btn-primary'>Admin</button>}</td>
-                                    <td>{user?.role !== 'admin' && <button onClick={() => handleDelete(user?.email)} className='btn btn-error'>Delete</button>}</td>
+                                    <td>{user?.role !== 'admin' && <button onClick={() => handleUpdate(user?._id)} className='btn btn-primary btn-sm text-white'>Admin</button>}</td>
+                                    <td>{user?.role !== 'admin' && <button onClick={() => handleDelete(user?.email)} className='btn btn-error btn-sm text-white'>Delete</button>}</td>
                                 </tr>)
                             }
 

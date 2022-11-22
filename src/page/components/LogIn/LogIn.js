@@ -10,6 +10,7 @@ const LogIn = () => {
     const Navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
+
     const handleLogin = data => {
         const { email, password } = data;
         signIn(email, password)

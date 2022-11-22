@@ -5,6 +5,7 @@ import AllUser from "../Deshboard/DeshboardLayout/AllUser/AllUser";
 import DeshboardLayout from "../Deshboard/DeshboardLayout/DeshboardLayout";
 import ManageDoctor from "../Deshboard/DeshboardLayout/ManageDoctor/ManageDoctor";
 import MyAppoinment from "../Deshboard/MyAppoinment/MyAppoinment";
+import PaidOption from "../Deshboard/PaidOption/PaidOption";
 import Home from "../Home/Home/Home";
 import LogIn from "../LogIn/LogIn";
 import Main from "../Main/Main";
@@ -45,6 +46,11 @@ const router = createBrowserRouter([
             },
             {
                 path: '/deshboard/doctors', element: <AdminRoute><ManageDoctor></ManageDoctor></AdminRoute>
+            },
+            {
+                path: '/deshboard/paid/:id',
+                loader: ({ params }) => fetch(`http://localhost:5000/deshboard/paid/${params.id}`),
+                element: <AdminRoute><PaidOption></PaidOption></AdminRoute>
             },
         ]
     }
