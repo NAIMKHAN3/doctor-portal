@@ -6,11 +6,11 @@ const AllUser = () => {
 
     const { data: users = [], refetch } = useQuery({
         queryKey: ['allusers'],
-        queryFn: () => fetch('http://localhost:5000/allusers')
+        queryFn: () => fetch('https://doctor-portal-server-sable.vercel.app/allusers')
             .then(res => res.json())
     })
     const handleUpdate = id => {
-        fetch(`http://localhost:5000/user/admin/${id}`, {
+        fetch(`https://doctor-portal-server-sable.vercel.app/user/admin/${id}`, {
             method: 'PUT',
             headers: {
                 authorization: `bearer ${localStorage.getItem('token')}`
@@ -26,7 +26,7 @@ const AllUser = () => {
     const handleDelete = email => {
         const proceed = window.confirm(`Are you sure, you want to delete ${email}`);
         if (proceed) {
-            fetch(`http://localhost:5000/user/${email}`, {
+            fetch(`https://doctor-portal-server-sable.vercel.app/user/${email}`, {
                 method: 'DELETE',
             })
                 .then(res => res.json())

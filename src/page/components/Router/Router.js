@@ -23,7 +23,7 @@ const router = createBrowserRouter([
                 path: '/home', element: <Home></Home>
             },
             {
-                path: '/apoinment', element: <PrivateRoute><AppoinmentPage></AppoinmentPage></PrivateRoute>
+                path: '/apoinment', element: <AppoinmentPage></AppoinmentPage>
             },
             {
                 path: '/login', element: <LogIn></LogIn>
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/deshboard/paid/:id',
-                loader: ({ params }) => fetch(`http://localhost:5000/deshboard/paid/${params.id}`),
+                loader: ({ params }) => fetch(`https://doctor-portal-server-sable.vercel.app/deshboard/paid/${params.id}`),
                 element: <AdminRoute><PaidOption></PaidOption></AdminRoute>
             },
         ]

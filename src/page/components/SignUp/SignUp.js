@@ -21,14 +21,6 @@ const SignUp = () => {
                 updateUserName(name)
                     .then(result => {
                         userAddMongodb(name, email)
-                        fetch(`http://localhost:5000/jwt?email=${email}`)
-                            .then(res => res.json())
-                            .then(data => {
-                                const token = data.token;
-                                localStorage.setItem('token', token)
-                            })
-                            .catch(e => console.log(e))
-                        navigate(from, { replace: true })
                     })
                     .catch(e => console.log(e))
             })
@@ -39,22 +31,14 @@ const SignUp = () => {
             .then(result => {
                 const user = result?.user;
                 userAddMongodb(user?.displayName, user?.email)
-                fetch(`http://localhost:5000/jwt?email=${user?.email}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const token = data.token;
-                        localStorage.setItem('token', token)
-                    })
-                toast.success('signup success')
-                navigate(from, { replace: true })
-                console.log(result.user)
             })
             .catch(e => console.log(e))
     }
 
     const userAddMongodb = (name, email) => {
         const user = { name, email }
-        fetch('http://localhost:5000/users', {
+        console.log(user)
+        fetch('https://doctor-portal-server-sable.vercel.app/users', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -62,7 +46,17 @@ const SignUp = () => {
             body: JSON.stringify(user)
         })
             .then(res => res.json())
-            .then(data => console.log(data))
+            .then(data => {
+                fetch(`https://doctor-portal-server-sable.vercel.app/jwt?email=${email}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const token = data.token;
+                        console.log(token)
+                        localStorage.setItem('token', token)
+                    })
+                    .catch(e => console.log(e))
+                navigate(from, { replace: true })
+            })
             .catch(e => console.log(e))
     }
     return (

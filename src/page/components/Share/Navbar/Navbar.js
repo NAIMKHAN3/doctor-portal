@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContex } from '../../../../UserContext/UserContext';
+import image from '../Navbar/nav-icon/Medical.jpg'
 
 const Navbar = () => {
     const { user, logOut, } = useContext(AuthContex)
@@ -37,6 +38,7 @@ const Navbar = () => {
                         }
                     </ul>
                 </div>
+                <img className='w-24' src={image} alt="" />
                 <Link to='/' className="btn btn-ghost normal-case text-xl">Doctor Portel</Link>
             </div>
             <div className="navbar-center hidden lg:flex">

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ const LogIn = () => {
         const { email, password } = data;
         signIn(email, password)
             .then(result => {
-                fetch(`http://localhost:5000/jwt/?email=${email}`)
+                fetch(`https://doctor-portal-server-sable.vercel.app/jwt/?email=${email}`)
                     .then(res => res.json())
                     .then(data => {
                         const token = data.token;
@@ -23,9 +23,15 @@ const LogIn = () => {
                         toast.success('login success')
                         Navigate(from, { replace: true })
                     })
-                    .catch(e => console.log(e))
+                    .catch(e => {
+
+                        console.log(e.message)
+                    })
             })
-            .catch(e => console.log(e))
+            .catch(e => {
+                toast.error('Your email or password is invalid, Please try again and valid email or password')
+                console.log(e)
+            })
     }
 
     const handleGoogle = () => {
@@ -35,7 +41,7 @@ const LogIn = () => {
                 const email = user?.email;
                 userAddMongodb(user?.displayName, email)
 
-                fetch(`http://localhost:5000/jwt/?email=${email}`)
+                fetch(`https://doctor-portal-server-sable.vercel.app/jwt/?email=${email}`)
                     .then(res => res.json())
                     .then(data => {
                         const token = data.token;
@@ -51,7 +57,7 @@ const LogIn = () => {
 
     const userAddMongodb = (name, email) => {
         const user = { name, email }
-        fetch('http://localhost:5000/users', {
+        fetch('https://doctor-portal-server-sable.vercel.app/users', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -80,6 +86,7 @@ const LogIn = () => {
                     {errors.password && <span className='text-red-600'>{errors.password?.message}</span>}
                     <label className="label">
                         <span className="label-text-alt">Forget Password?</span>
+
                     </label>
                     <input className='btn btn-accent w-full my-5' value={'Submit'} type="submit" />
                 </form>
@@ -87,6 +94,9 @@ const LogIn = () => {
                 <div className="flex flex-col w-full border-opacity-50">
                     <div className="divider">OR</div>
                 </div>
+
+
+
                 <button onClick={handleGoogle} className='btn btn-outline w-full'>CONTINUE WITH GOOGLE</button>
             </div>
         </div>

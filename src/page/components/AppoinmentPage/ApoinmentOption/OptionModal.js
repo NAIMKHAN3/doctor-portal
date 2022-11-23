@@ -23,7 +23,7 @@ const OptionModal = ({ inputModal, selected, setInputModal, refetch }) => {
             email,
             phone,
         }
-        fetch('http://localhost:5000/booking', {
+        fetch('https://doctor-portal-server-sable.vercel.app/booking', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
