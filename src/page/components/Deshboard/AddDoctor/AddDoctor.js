@@ -64,7 +64,7 @@ const AddDoctor = () => {
         <div className='w-96 mx-auto my-20 shadow-xl rounded-lg p-7'>
             <div>
                 <form onSubmit={handleSubmit(handleAddDoctor)}>
-                    <h1 className='text-3xl text-center text-primary'>Log In</h1>
+                    <h1 className='text-3xl text-center text-primary'>Add Doctor</h1>
                     <label className="label  mt-5">
                         <span className="label-text">Email</span>
                     </label>
